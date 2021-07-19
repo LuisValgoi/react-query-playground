@@ -9,10 +9,9 @@ const PlayersContext = createContext();
 
 export function PlayersProvider({ children }) {
   const [filter, setFilter] = useState("");
-  const [count] = useState([]);
 
   return (
-    <PlayersContext.Provider value={{ count, filter, setFilter }}>
+    <PlayersContext.Provider value={{ filter, setFilter }}>
       {children}
     </PlayersContext.Provider>
   );
