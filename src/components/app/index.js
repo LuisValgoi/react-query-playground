@@ -2,11 +2,7 @@ import React, { useEffect } from "react";
 import { debounce } from "lodash";
 
 import useBreakpoints from "../../hooks/useBreakpoints";
-import {
-  usePlayers,
-  usePlayersAdd,
-  usePlayersDelete,
-} from "../../contexts/players";
+import { usePlayers, usePlayersAdd } from "../../contexts/players";
 
 import Example from "../example";
 import * as SC from "./style";
@@ -15,13 +11,10 @@ function App() {
   const breakpoint = useBreakpoints();
   const { query, view } = usePlayers();
   const rqAdd = usePlayersAdd();
-  const rqDelete = usePlayersDelete();
 
   const handleFilterChange = debounce((e) => {
     view.setFilter(e.target.value);
   }, 500);
-
-  const handleDelete = (id) => rqDelete.mutate(id);
 
   const handleAddRandom = () =>
     rqAdd.mutate({
@@ -44,7 +37,7 @@ function App() {
         </div>
       </SC.Header>
       <SC.Container $breakpoint={breakpoint}>
-        <Example players={query} handleDelete={handleDelete} />
+        <Example players={query} />
       </SC.Container>
     </SC.Wrapper>
   );

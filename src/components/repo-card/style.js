@@ -29,15 +29,16 @@ export const Span = styled.span`
   margin-right: 10px;
   font-size: 25px;
 `;
+
 export const FooterWrapper = styled.div`
   width: 100%;
   display: flex;
-  flex-direction: column;
-  align-items: flex-end;
+  flex-direction: row;
+  justify-content: flex-end;
 `;
 
 export const Button = styled.button`
-  /* margin-top: 5px; */
+  margin-left: 5px;
   background-color: transparent;
   width: fit-content;
 
@@ -50,4 +51,20 @@ export const Button = styled.button`
   &:hover {
     background-color: #ededed;
   }
+`;
+
+export const Input = styled.input`
+  padding: 0.2rem 0.5rem;
+  border-radius: 5px;
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border: 2px solid black;
+
+  &:focus {
+    border: 2px solid lightgrey;
+  }
+`;
+
+export const Space = styled.div`
+  height: 5px;
 `;

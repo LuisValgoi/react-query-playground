@@ -111,3 +111,51 @@ const deletePlayer = async (id) => {
     },
   });
 };
+
+// edit
+export function usePlayersEdit() {
+  const queryClient = useQueryClient();
+
+  return useMutation(editPlayer, {
+    onMutate: (editData) => {
+      queryClient.cancelQueries(REACT_QUERY.PLAYERS);
+      const snapshot = queryClient.getQueryData(REACT_QUERY.PLAYERS);
+      const modifiedSnapshot = [...snapshot];
+      modifiedSnapshot.forEach((v) => {
+        if (v.id === editData.name) {
+          v.name = editData.form.name;
+          v.email = editData.form.email;
+        }
+      });
+      queryClient.setQueryData(REACT_QUERY.PLAYERS, modifiedSnapshot);
+
+      return () => queryClient.setQueryData(REACT_QUERY.PLAYERS, snapshot);
+    },
+    onError: (error, newData, rollback) => rollback(),
+    onSuccess: (newData) => {
+      const snapshot = queryClient.getQueryData(REACT_QUERY.PLAYERS);
+      const modifiedSnapshot = [...snapshot];
+      modifiedSnapshot.forEach((v) => {
+        if (v.id === newData.id) v = { ...newData };
+      });
+      queryClient.setQueryData(REACT_QUERY.PLAYERS, modifiedSnapshot);
+
+      return () => queryClient.setQueryData(REACT_QUERY.PLAYERS, snapshot);
+    },
+  });
+}
+const editPlayer = async (body) => {
+  const res = await fetch(`https://gorest.co.in/public/v1/users/${body.id}`, {
+    method: "PUT",
+    body: JSON.stringify(body),
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
+    },
+  });
+
+  const { data } = await res.json();
+
+  return data;
+};
