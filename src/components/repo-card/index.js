@@ -1,46 +1,19 @@
 import React from "react";
 
-import styled from "@emotion/styled";
+import * as SC from "./style";
 
-export default function RepoCard({ name, email, gender }) {
+export default function RepoCard({ name, email, gender, handleDelete }) {
   return (
-    <Wrapper>
-      <Title>{`${name}`}</Title>
-      <Paragraph>{email}</Paragraph>
-      <Paragraph $hasMarginTop>
-        <Span>⚥ </Span>
+    <SC.Wrapper>
+      <SC.Title>{`${name}`}</SC.Title>
+      <SC.Paragraph>{email}</SC.Paragraph>
+      <SC.Paragraph $hasMarginTop>
+        <SC.Span>⚥ </SC.Span>
         <strong>{gender}</strong>
-      </Paragraph>
-    </Wrapper>
+      </SC.Paragraph>
+      <SC.FooterWrapper>
+        <SC.Button onClick={handleDelete}>🗑️ </SC.Button>
+      </SC.FooterWrapper>
+    </SC.Wrapper>
   );
 }
-
-const Wrapper = styled.div`
-  margin: 1rem 0rem;
-  padding: 1.5rem;
-  background-color: white;
-  box-shadow: 0px 0px 5px 1px lightgrey;
-  border: 0px;
-  display: flex;
-  flex-direction: column;
-  border-radius: 0.2rem;
-
-  &:hover {
-    background-color: #fafafa;
-  }
-`;
-
-const Title = styled.h2`
-  margin: 0px 0px 10px 0px;
-`;
-
-const Paragraph = styled.p((props) => ({
-  fontSize: "16px",
-  margin: "0px",
-  marginTop: props.$hasMarginTop && "5px",
-}));
-
-const Span = styled.span`
-  margin-right: 10px;
-  font-size: 25px;
-`;

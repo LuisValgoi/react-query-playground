@@ -5,8 +5,8 @@ const REACT_QUERY = {
   PLAYERS: "PLAYERS",
 };
 
+// provider
 const PlayersContext = createContext();
-
 export function PlayersProvider({ children }) {
   const [filter, setFilter] = useState("AAA");
 
@@ -17,6 +17,7 @@ export function PlayersProvider({ children }) {
   );
 }
 
+// get
 export function usePlayers() {
   const context = useContext(PlayersContext);
   if (!context) throw new Error("this must be used within a provider");
@@ -30,7 +31,6 @@ export function usePlayers() {
 
   return { query, view: { filter, setFilter, count } };
 }
-
 const fetchPlayers = async (filter) => {
   const param = filter ? `?name=${filter}` : "";
   const res = await fetch(`https://gorest.co.in/public/v1/users${param}`);
@@ -44,27 +44,32 @@ const fetchPlayers = async (filter) => {
   return dataSorted;
 };
 
-export function usePlayersMutation() {
+// add
+export function usePlayersAdd() {
   const queryClient = useQueryClient();
 
   return useMutation(postPlayer, {
     onMutate: (newData) => {
       queryClient.cancelQueries(REACT_QUERY.PLAYERS);
-
       const snapshot = queryClient.getQueryData(REACT_QUERY.PLAYERS);
-
-      queryClient.setQueryData(REACT_QUERY.PLAYERS, (prev) => [
-        ...prev,
-        { ...newData, id: `AAAA${Date.now()}` },
-      ]);
+      const updatedData = [...snapshot, newData];
+      queryClient.setQueryData(REACT_QUERY.PLAYERS, updatedData);
 
       return () => queryClient.setQueryData(REACT_QUERY.PLAYERS, snapshot);
     },
     onError: (error, newData, rollback) => rollback(),
-    onSettled: () => queryClient.refetchQueries(REACT_QUERY.PLAYERS),
+    onSuccess: (newData) => {
+      const snapshot = queryClient.getQueryData(REACT_QUERY.PLAYERS);
+      const modifiedSnapshot = [...snapshot];
+      modifiedSnapshot.forEach((v) => {
+        if (v.name === newData.name) v.id = newData.id;
+      });
+      queryClient.setQueryData(REACT_QUERY.PLAYERS, modifiedSnapshot);
+
+      return () => queryClient.setQueryData(REACT_QUERY.PLAYERS, snapshot);
+    },
   });
 }
-
 const postPlayer = async (body) => {
   const res = await fetch("https://gorest.co.in/public/v1/users", {
     method: "POST",
@@ -79,4 +84,30 @@ const postPlayer = async (body) => {
   const { data } = await res.json();
 
   return data;
+};
+
+// delete
+export function usePlayersDelete() {
+  const queryClient = useQueryClient();
+
+  return useMutation(deletePlayer, {
+    onMutate: (id) => {
+      const previousValue = queryClient.getQueryData(REACT_QUERY.PLAYERS);
+      const removeDeleted = [...previousValue].filter((v) => v.id !== id);
+      queryClient.setQueryData(REACT_QUERY.PLAYERS, removeDeleted);
+
+      return () => queryClient.setQueryData(REACT_QUERY.PLAYERS, previousValue);
+    },
+    onError: (error, id, rollback) => rollback(),
+  });
+}
+const deletePlayer = async (id) => {
+  fetch(`https://gorest.co.in/public/v1/users/${id}`, {
+    method: "DELETE",
+    headers: {
+      Accept: "application/json",
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
+    },
+  });
 };
