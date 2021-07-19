@@ -8,7 +8,7 @@ const REACT_QUERY = {
 const PlayersContext = createContext();
 
 export function PlayersProvider({ children }) {
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState("AAA");
 
   return (
     <PlayersContext.Provider value={{ filter, setFilter }}>
@@ -47,22 +47,35 @@ const fetchPlayers = async (filter) => {
 export function usePlayersMutation() {
   const queryClient = useQueryClient();
 
-  const mutation = useMutation(postPlayer, {
-    onSuccess: () => {
-      queryClient.invalidateQueries("players");
+  return useMutation(postPlayer, {
+    onMutate: (newData) => {
+      queryClient.cancelQueries(REACT_QUERY.PLAYERS);
+
+      const snapshot = queryClient.getQueryData(REACT_QUERY.PLAYERS);
+
+      queryClient.setQueryData(REACT_QUERY.PLAYERS, (prev) => [
+        ...prev,
+        { ...newData, id: `AAAA${Date.now()}` },
+      ]);
+
+      return () => queryClient.setQueryData(REACT_QUERY.PLAYERS, snapshot);
     },
+    onError: (error, newData, rollback) => rollback(),
+    onSettled: () => queryClient.refetchQueries(REACT_QUERY.PLAYERS),
   });
 }
+
 const postPlayer = async (body) => {
   const res = await fetch("https://gorest.co.in/public/v1/users", {
     method: "POST",
-    body,
+    body: JSON.stringify(body),
     headers: {
       Accept: "application/json",
       "Content-Type": "application/json",
       Authorization: `Bearer ${process.env.REACT_APP_API_ACCESS_TOKEN}`,
     },
   });
+
   const { data } = await res.json();
 
   return data;

@@ -38,6 +38,24 @@ export const Input = styled.input`
   border: 2px solid black;
 
   &:focus {
-    border: 2px solid grey;
+    border: 2px solid lightgrey;
+  }
+`;
+
+export const Button = styled.button`
+  height: 100%;
+  color: black;
+  background-color: white;
+  margin-right: 5px;
+  padding: 1rem;
+  border-radius: 10px;
+
+  outline: 2px solid transparent;
+  outline-offset: 2px;
+  border: 2px solid black;
+  cursor: pointer;
+
+  &:focus {
+    border: 2px solid lightgrey;
   }
 `;
