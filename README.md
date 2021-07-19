@@ -12,6 +12,16 @@ Its main goal is to combine the `query` w/ `mutation` from `react-query` w/ addi
 
 - yarn start.
 
+# Features
+
+- list
+
+- add
+
+- edit
+
+- filter
+
 # Stack
 
 - `CRA Template`: for bootstrap.
