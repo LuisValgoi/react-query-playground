@@ -4,6 +4,14 @@ This repository was created following [this link here](https://react-query.tanst
 
 Its main goal is to combine the `query` w/ `mutation` from `react-query` w/ additional of a `grid-system` from `@emotion`.
 
+# Getting Started
+
+- get your access token from: https://gorest.co.in.
+
+- set your env.variable.
+
+- yarn start.
+
 # Stack
 
 - `CRA Template`: for bootstrap.
