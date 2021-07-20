@@ -44,7 +44,7 @@ export const Button = styled.button`
 
   outline: 2px solid transparent;
   outline-offset: 2px;
-  padding-right: 10px;
+  padding-right: 8px;
   border-radius: 5px;
   cursor: pointer;
 
