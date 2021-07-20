@@ -9,8 +9,8 @@ import * as SC from "./style";
 
 function App() {
   const breakpoint = useBreakpoints();
-  const { query, view } = usePlayers();
   const rqAdd = usePlayersAdd();
+  const { query, view } = usePlayers();
 
   const handleFilterChange = debounce((e) => {
     view.setFilter(e.target.value);
@@ -31,10 +31,11 @@ function App() {
     <SC.Wrapper>
       <SC.Header>
         <SC.Title>{`Players (${view.count})`}</SC.Title>
-        <div>
+        <SC.HeaderActionWrappers>
+          <Pagination view={view} query={query} />
           <SC.Button onClick={handleAddRandom}>Add Random Player</SC.Button>
           <SC.Input defaultValue={view.filter} onChange={handleFilterChange} />
-        </div>
+        </SC.HeaderActionWrappers>
       </SC.Header>
       <SC.Container $breakpoint={breakpoint}>
         <Example players={query} />
@@ -44,3 +45,31 @@ function App() {
 }
 
 export default App;
+
+const Pagination = ({ view, query }) => {
+  const isPreviousData = query.isPreviousData;
+  const currentPage = query.data?.meta?.pagination?.page;
+  const availablePages = query.data?.meta?.pagination?.pages;
+
+  return (
+    <SC.PaginationWrapper>
+      <button
+        disabled={view.page === 1}
+        onClick={() => view.setPage((old) => Math.max(old - 1, 0))}
+      >
+        {`<`}
+      </button>
+      <SC.PaginationCurrentPage>{view.page}</SC.PaginationCurrentPage>
+      <button
+        disabled={isPreviousData || currentPage === availablePages}
+        onClick={() => {
+          if (!isPreviousData && currentPage < availablePages) {
+            view.setPage((old) => old + 1);
+          }
+        }}
+      >
+        {`>`}
+      </button>
+    </SC.PaginationWrapper>
+  );
+};

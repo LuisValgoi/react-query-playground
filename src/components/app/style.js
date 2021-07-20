@@ -24,6 +24,14 @@ export const Container = styled.div((props) => {
   };
 });
 
+export const HeaderActionWrappers = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+  align-content: center;
+`;
+
 export const Header = styled.div`
   display: flex;
   flex-direction: row;
@@ -58,4 +66,14 @@ export const Button = styled.button`
   &:focus {
     border: 2px solid lightgrey;
   }
+`;
+
+export const PaginationWrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  margin-right: 10px;
+`;
+
+export const PaginationCurrentPage = styled.span`
+  margin: 0px 5px;
 `;

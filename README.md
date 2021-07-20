@@ -20,6 +20,8 @@ Its main goal is to combine the `query` w/ `mutation` from `react-query` w/ addi
 
 - edit
 
+- delete
+
 - filter
 
 # Stack
