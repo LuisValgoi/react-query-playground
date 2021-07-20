@@ -1,6 +1,3 @@
-[build]
-command = “CI= npm run build”
-
 # Redirecting any route to home
 [[redirects]]
   from = "/*"
