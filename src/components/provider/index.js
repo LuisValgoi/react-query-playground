@@ -6,7 +6,7 @@ import { PlayersProvider } from "../../contexts/players";
 export default function Provider(props) {
   const queryClient = new QueryClient({
     defaultOptions: {
-      queries: { refetchOnWindowFocus: false, keepPreviousData: true },
+      queries: { refetchOnWindowFocus: false },
     },
   });
 
