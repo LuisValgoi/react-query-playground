@@ -24,6 +24,8 @@ Its main goal is to combine the `query` w/ `mutation` from `react-query` w/ addi
 
 - filter
 
+- pagination
+
 # Stack
 
 - `CRA Template`: for bootstrap.
